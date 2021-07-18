@@ -5,6 +5,19 @@
 {% block body %}
     <h1>Book index</h1>
 
+    <span>
+        <a href={{ path('book_index', {'field_name' : "name"}) }}>
+        <button class="btn" > By Name</button>
+        </a>
+
+        <a href={{ path('book_index', {'field_name' : "description"}) }}>
+        <button class="btn" > By Description</button>
+        </a>
+
+        <a href={{ path('book_index', {'field_name' : "publish_year"}) }}>
+        <button class="btn" > By Date</button>
+        </a>
+    </span>
     <table class="table">
         <thead>
             <tr>

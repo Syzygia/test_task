@@ -17,12 +17,19 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class BookController extends AbstractController
 {
     /**
-     * @Route("/", name="book_index", methods={"GET"})
+     * @Route("/{field_name?}", name="book_index", methods={"GET"})
      */
-    public function index(BookRepository $bookRepository): Response
-    {
+    public function index(?string $field_name,BookRepository $bookRepository): Response
+    {	if (is_null($field_name))
+    	{
+			return $this->render('book/index.html.twig', [
+				'books' => $bookRepository->findAll()
+			]);
+		}
         return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->findAll(),
+            'books' => $bookRepository->findBy(array(), [
+            	$field_name => "ASC"
+			]),
         ]);
     }
 
