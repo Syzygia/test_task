@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/book")
@@ -91,4 +92,33 @@ class BookController extends AbstractController
 
         return $this->redirectToRoute('book_index', [], Response::HTTP_SEE_OTHER);
     }
+
+	/**
+	 * @Route("/{id}/submit", name="book_submit", methods={"POST"})
+	 */
+    public function submit(Request $request, ValidatorInterface $validator): Response
+	{
+		$data = $request->request->all();
+
+		$entityManager = $this->getDoctrine()->getManager();
+		$book = $entityManager->getRepository(Book::class)->find($data["book"]["id"]);
+
+		if (!$book) {
+			throw $this->createNotFoundException(
+				'No book found for id '.$data["book"]["id"]
+			);
+		}
+		$book->setName($data["book"]["name"]);
+		$book->setDescription($data["book"]["description"]);
+		$book->setPublishYear($data["book"]["publish_year"]);
+		$book->setCover($data["book"]["cover"]);
+
+		$errors = $validator->validate($book);
+		if (count($errors) > 0) {
+			return new Response((string) $errors, 400);
+		}
+
+		$entityManager->flush();
+		return $this->redirectToRoute('book_index', [], Response::HTTP_SEE_OTHER);
+	}
 }

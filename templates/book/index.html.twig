@@ -18,17 +18,34 @@
         </thead>
         <tbody>
         {% for book in books %}
+                <form name="book" action="{{ path('book_submit', {'id' : book.id}) }}" method="post">
             <tr>
-                <td>{{ book.id }}</td>
-                <td>{{ book.name }}</td>
-                <td>{{ book.description }}</td>
-                <td>{{ book.cover }}</td>
-                <td>{{ book.publishYear }}</td>
                 <td>
+                    <input type="text" name="book[id]" maxlength="1000" value={{ book.id }} readonly>
+                </td>
+                <td>
+                    <input type="text" name="book[name]" maxlength="1000" value={{ book.name }}>
+                </td>
+                <td>
+                    <input type="text" name="book[description]" maxlength="1000" value={{ book.description }}>
+                </td>
+                <td>
+                    <input type="text" name="book[cover]" maxlength="1000" value={{ book.cover }}>
+                </td>
+                <td>
+                    <input type="text" name="book[publish_year]" maxlength="1000" value={{ book.publishYear }}>
+                </td>
+{#                <td>{{ book.name }}</td>#}
+{#                <td>{{ book.description }}</td>#}
+{#                <td>{{ book.cover }}</td>#}
+{#                <td>{{ book.publishYear }}</td>#}
+                <td>
+                    <button class="btn"> Save</button>
                     <a href="{{ path('book_show', {'id': book.id}) }}">show</a>
                     <a href="{{ path('book_edit', {'id': book.id}) }}">edit</a>
                 </td>
             </tr>
+                </form>
         {% else %}
             <tr>
                 <td colspan="6">no records found</td>
