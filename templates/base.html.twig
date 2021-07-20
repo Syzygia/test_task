@@ -14,6 +14,24 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %} <a href="{{ path('book_index', {'id': book.id}) }}">Books</a>{% endblock %}
+        {% block body %}
+
+        <div id="sidebar">
+            {% block sidebar %}
+                <ul>
+                    <li><a href="{{ path('book_index') }}">Book</a></li>
+                    <li><a href="{{ path('author_index') }}">Author</a></li>
+                    <li><a href="{{ path('book_doctrine_request') }}">Doctorine request</a></li>
+                    <li><a href="{{ path('book_sql_request') }}">Sql request</a></li>
+                </ul>
+            {% endblock %}
+        </div>
+
+        <div id="content">
+            {% block content %} {% endblock %}
+        </div>
+
+        {% endblock %}
+
     </body>
 </html>

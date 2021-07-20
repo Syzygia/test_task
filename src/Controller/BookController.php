@@ -133,4 +133,22 @@ class BookController extends AbstractController
 		$entityManager->flush();
 		return $this->redirectToRoute('book_index', [], Response::HTTP_SEE_OTHER);
 	}
+
+	/**
+	 * @Route("/doctrine/request", name="book_doctrine_request", methods={"GET"})
+	 */
+	public function orm_request(Request $request, BookRepository $bookRepository): Response
+	{
+		$arr = $bookRepository->doctrine_req("a");
+		return new Response(json_encode($arr), Response::HTTP_OK);
+	}
+
+	/**
+	 * @Route("/sql/request", name="book_sql_request", methods={"GET"})
+	 */
+	public function sql_request(Request $request, BookRepository $bookRepository): Response
+	{
+		$arr = $bookRepository->sql_req("a");
+		return new Response(json_encode($arr), Response::HTTP_OK);
+	}
 }

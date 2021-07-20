@@ -118,6 +118,9 @@
     "psr/log": {
         "version": "1.1.4"
     },
+    "psy/psysh": {
+        "version": "v0.10.8"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -175,6 +178,9 @@
     },
     "symfony/event-dispatcher-contracts": {
         "version": "v1.1.9"
+    },
+    "symfony/expression-language": {
+        "version": "v4.4.25"
     },
     "symfony/filesystem": {
         "version": "v4.4.26"
@@ -301,6 +307,9 @@
     "symfony/security-csrf": {
         "version": "v4.4.25"
     },
+    "symfony/serializer": {
+        "version": "v4.4.26"
+    },
     "symfony/service-contracts": {
         "version": "v2.4.0"
     },
@@ -348,6 +357,9 @@
     },
     "symfony/yaml": {
         "version": "v4.4.26"
+    },
+    "theofidry/psysh-bundle": {
+        "version": "4.4.0"
     },
     "twig/twig": {
         "version": "v3.3.2"
