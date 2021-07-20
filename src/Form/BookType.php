@@ -22,7 +22,10 @@ class BookType extends AbstractType
             ->add('publish_year')
             ->add('authors', CollectionType::class, [
 		'entry_type' => AuthorType::class,
-		'entry_options' => ['label' => false],
+		'entry_options' => ['label' => false,
+		'by_reference' => false,],
+		'allow_add'=> true,
+		'allow_delete' => true,
 	])
         ;
     }
