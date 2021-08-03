@@ -22,7 +22,18 @@ class BookRepository extends ServiceEntityRepository
     //  * @return Book[] Returns an array of Book objects
     //  */
 
-    public function doctrine_req($value)
+	public function filter_req($field_name, $value) {
+		$qb = $this->createQueryBuilder('b');
+		$res = $qb
+			->where('b.'.$field_name.' LIKE :value')
+			->setParameter('value', '%'.$value.'%')
+			->getQuery()
+			->getResult();
+		return $res;
+
+	}
+
+    public function doctrine_req()
 	{
 		$qb = $this->createQueryBuilder('b');
 		$builder = $qb
@@ -36,17 +47,19 @@ class BookRepository extends ServiceEntityRepository
 
 	}
 
-	public function sql_req($value)
+	public function sql_req()
 	{
-		$qb = $this->getEntityManager()->createQuery(
-			'SELECT b.name, COUNT(a) as authors_count
-			 FROM App\Entity\Book b 
-			LEFT JOIN b.authors a
-			 GROUP BY b
-			 
-			  HAVING COUNT(a) > 1')->getResult();
+		$con = $this->getEntityManager()->getConnection();
+		$sql =
+			'SELECT  b.name, COUNT(a) as authors_count
+			 FROM book b 
+			LEFT JOIN author_book a on (b.id = a.book_id)
+			 GROUP BY b.id			 
+			  HAVING COUNT(a) > 1';
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
 
-		return $qb;
+		return $stmt->fetchAllAssociative();
 
 	}
     /*

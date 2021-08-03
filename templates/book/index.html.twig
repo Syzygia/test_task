@@ -6,17 +6,15 @@
     <h1>Book index</h1>
 
     <span>
-        <a href={{ path('book_index', {'field_name' : "name"}) }}>
-        <button class="btn" > By Name</button>
-        </a>
+         <form name="filter"  action="{{ path ('book_filter')}}" method="post">
+            <label > Value for filtering</label>
+            <input type="text" name="value" maxlength="1000">
 
-        <a href={{ path('book_index', {'field_name' : "description"}) }}>
-        <button class="btn" > By Description</button>
-        </a>
+            <button class="btn" name="Name" type="submit" value="name">By Name</button>
+            <button class="btn" name="Description" type="submit" value="description">BY Description</button>
+            <button class="btn" name="Publish_year" type="submit" value="publish_year">BY Publish_year</button>
 
-        <a href={{ path('book_index', {'field_name' : "publish_year"}) }}>
-        <button class="btn" > By Date</button>
-        </a>
+         </form>
     </span>
     <table class="table">
         <thead>

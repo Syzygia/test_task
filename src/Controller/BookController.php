@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Form\BookType;
 use App\Repository\BookRepository;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,21 +32,39 @@ class BookController extends AbstractController
 // , requirements={"field_name" = '/[^A-Za-z0-9]/ | /^\s*$/})
 
     /**
-     * @Route("/{field_name?}", name="book_index", methods={"GET"})
+     * @Route("/", name="book_index", methods={"GET"})
      */
-    public function index(?string $field_name,BookRepository $bookRepository): Response
-    {	if (is_null($field_name))
-    	{
+    public function index(BookRepository $bookRepository, $books = null): Response
+    {
+		if (is_null($books)) {
 			return $this->render('book/index.html.twig', [
 				'books' => $bookRepository->findAll()
 			]);
 		}
-        return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->findBy(array(), [
-            	$field_name => "ASC"
-			]),
-        ]);
+		return $this->render('book/index.html.twig', [
+			'books' => $books
+		]);
     }
+
+	/**
+	 * @Route("/filter", name="book_filter", methods={"POST"})
+	 */
+	public function filter(BookRepository $bookRepository, Request $request): Response
+	{
+		$data = $request->request->all();
+		if (!is_null($data["value"]) && $data["value"] != "") {
+			return $this->index($bookRepository,
+				$bookRepository->filter_req($data[array_keys($data)[1]], $data["value"])
+			);
+		}
+
+		return $this->index($bookRepository,
+			 $bookRepository->findBy(array(), [
+				$data[array_keys($data)[1]] => "ASC"
+			])
+		);
+	}
+
 
     /**
      * @Route("/new", name="book_new", methods={"GET","POST"})
@@ -139,7 +158,7 @@ class BookController extends AbstractController
 	 */
 	public function orm_request(Request $request, BookRepository $bookRepository): Response
 	{
-		$arr = $bookRepository->doctrine_req("a");
+		$arr = $bookRepository->doctrine_req();
 		return new Response(json_encode($arr), Response::HTTP_OK);
 	}
 
@@ -148,7 +167,7 @@ class BookController extends AbstractController
 	 */
 	public function sql_request(Request $request, BookRepository $bookRepository): Response
 	{
-		$arr = $bookRepository->sql_req("a");
+		$arr = $bookRepository->sql_req();
 		return new Response(json_encode($arr), Response::HTTP_OK);
 	}
 }
